@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gemini Notes App</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+            background-color: #f4f4f4;
+            color: #333;
+        }
+        .container {
+            max-width: 800px;
+            margin: auto;
+            background: #fff;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        h1 {
+            color: #0056b3;
+            text-align: center;
+        }
+        form {
+            background: #e9ecef;
+            padding: 20px;
+            border-radius: 5px;
+            margin-bottom: 20px;
+        }
+        form input[type="text"], form textarea {
+            width: calc(100% - 22px);
+            padding: 10px;
+            margin-bottom: 10px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+        }
+        form button {
+            background-color: #007bff;
+            color: white;
+            padding: 10px 15px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 16px;
+        }
+        form button:hover {
+            background-color: #0056b3;
+        }
+        .note {
+            background: #fff;
+            border: 1px solid #ddd;
+            padding: 15px;
+            margin-bottom: 10px;
+            border-radius: 5px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .note-content h3 {
+            margin-top: 0;
+            color: #333;
+        }
+        .note-content p {
+            color: #666;
+        }
+        .note-actions button {
+            background-color: #ffc107;
+            color: white;
+            padding: 8px 12px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            margin-left: 5px;
+        }
+        .note-actions button.delete {
+            background-color: #dc3545;
+        }
+        .note-actions button:hover {
+            opacity: 0.9;
+        }
+        .flash-message {
+            padding: 10px;
+            margin-bottom: 15px;
+            border-radius: 5px;
+            text-align: center;
+        }
+        .flash-message.error {
+            background-color: #f8d7da;
+            color: #721c24;
+            border: 1px solid #f5c6cb;
+        }
+        .flash-message.success {
+            background-color: #d4edda;
+            color: #155724;
+            border: 1px solid #c3e6cb;
+        }
+        .app-version {
+            text-align: center;
+            margin-top: 20px;
+            color: #888;
+            font-size: 0.9em;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Gemini Notes App</h1>
+
+        {% with messages = get_flashed_messages(with_categories=true) %}
+            {% if messages %}
+                {% for category, message in messages %}
+                    <div class="flash-message {{ category }}">{{ message }}</div>
+                {% endfor %}
+            {% endif %}
+        {% endwith %}
+
+        <form action="{{ url_for('add_note') }}" method="post">
+            <input type="text" name="title" placeholder="Note Title" required>
+            <textarea name="content" placeholder="Note Content" rows="5" required></textarea>
+            <button type="submit">Add Note</button>
+        </form>
+
+        <h2>Your Notes</h2>
+        {% if notes %}
+            {% for note in notes %}
+                <div class="note">
+                    <div class="note-content">
+                        <h3>{{ note.title }}</h3>
+                        <p>{{ note.content }}</p>
+                        <small>Last updated: {{ note.timestamp.strftime('%Y-%m-%d %H:%M:%S') if note.timestamp else 'N/A' }}</small>
+                    </div>
+                    <div class="note-actions">
+                        <button onclick="window.location.href='{{ url_for('edit_note', note_id=note.id) }}'">Edit</button>
+                        <form action="{{ url_for('delete_note', note_id=note.id) }}" method="post" style="display:inline;">
+                            <button type="submit" class="delete">Delete</button>
+                        </form>
+                    </div>
+                </div>
+            {% endfor %}
+        {% else %}
+            <p>No notes yet. Add one above!</p>
+        {% endif %}
+
+        <div class="app-version">
+            App Version: {{ app_version }}
+        </div>
+    </div>
+</body>
+</html>
