@@ -31,3 +31,5 @@ substitutions:
   _SERVICE_NAME: gemini-notes-app   # Replace with your desired Cloud Run service name
   _REGION: us-central1             # Replace with your desired Google Cloud region (e.g., us-central1, europe-west1)
   _TAG_NAME: '1.0.0'               # Or use an environment variable like $COMMIT_SHA for dynamic tagging
+
+  logging: CLOUD_LOGGING_ONLY
