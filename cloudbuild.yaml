@@ -1,0 +1,33 @@
+steps:
+  # Build the Docker image
+  - name: 'gcr.io/cloud-builders/docker'
+    args: ['build', '-t', 'gcr.io/${_PROJECT_ID}/${_SERVICE_NAME}:${_TAG_NAME}', '.']
+
+  # Push the Docker image to Google Container Registry
+  - name: 'gcr.io/cloud-builders/docker'
+    args: ['push', 'gcr.io/${_PROJECT_ID}/${_SERVICE_NAME}:${_TAG_NAME}']
+
+  # Deploy to Cloud Run
+  - name: 'gcr.io/cloud-builders/gcloud'
+    args:
+      - 'run'
+      - 'deploy'
+      - '${_SERVICE_NAME}'
+      - '--image'
+      - 'gcr.io/${_PROJECT_ID}/${_SERVICE_NAME}:${_TAG_NAME}'
+      - '--region'
+      - '${_REGION}'
+      - '--platform'
+      - 'managed'
+      - '--allow-unauthenticated' # Adjust based on your authentication needs
+    env:
+      - 'APP_VERSION=${_TAG_NAME}' # Pass version as environment variable to the app
+
+images:
+  - 'gcr.io/${_PROJECT_ID}/${_SERVICE_NAME}:${_TAG_NAME}'
+
+substitutions:
+  _PROJECT_ID: your-gcp-project-id  # Replace with your Google Cloud Project ID
+  _SERVICE_NAME: gemini-notes-app   # Replace with your desired Cloud Run service name
+  _REGION: us-central1             # Replace with your desired Google Cloud region (e.g., us-central1, europe-west1)
+  _TAG_NAME: '1.0.0'               # Or use an environment variable like $COMMIT_SHA for dynamic tagging
