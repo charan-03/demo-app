@@ -6,7 +6,7 @@ from firebase_admin import credentials, firestore
 app = Flask(__name__)
 app.secret_key = os.urandom(24) # Needed for flash messages
 
-APP_VERSION = "2.1.1"
+APP_VERSION = "Version V1"
 
 # Initialize Firestore
 try:
