@@ -29,7 +29,7 @@ images:
 options:
   logging: CLOUD_LOGGING_ONLY
 substitutions:
-  _PROJECT_ID: trainocat-1771998241948  # Replace with your Google Cloud Project ID
+  _PROJECT_ID: trainocat-1772522168953  # Replace with your Google Cloud Project ID
   _SERVICE_NAME: gemini-notes-app   # Replace with your desired Cloud Run service name
   _REGION: us-central1             # Replace with your desired Google Cloud region (e.g., us-central1, europe-west1)
   _TAG_NAME: '1.0.0'               # Or use an environment variable like $COMMIT_SHA for dynamic tagging
