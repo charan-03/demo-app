@@ -1,11 +1,11 @@
 steps:
   # Build the Docker image
   - name: 'gcr.io/cloud-builders/docker'
-    args: ['build', '-t', '${_REGION}-docker.pkg.dev/${_PROJECT_ID}/${_SERVICE_NAME}:${_TAG_NAME}', '.'] # Build context is demo-app
+    args: ['build', '-t', '${_REGION}-docker.pkg.dev/${_PROJECT_ID}/${_SERVICE_NAME}/${_SERVICE_NAME}:${_TAG_NAME}', '.'] # Build context is demo-app
 
   # Push the Docker image to Google Container Registry
   - name: 'gcr.io/cloud-builders/docker'
-    args: ['push', '${_REGION}-docker.pkg.dev/${_PROJECT_ID}/${_SERVICE_NAME}:${_TAG_NAME}']
+    args: ['push', '${_REGION}-docker.pkg.dev/${_PROJECT_ID}/${_SERVICE_NAME}/${_SERVICE_NAME}:${_TAG_NAME}']
 
   # Deploy to Cloud Run
   - name: 'gcr.io/cloud-builders/gcloud'
@@ -14,7 +14,7 @@ steps:
       - 'deploy'
       - '${_SERVICE_NAME}'
       - '--image'
-      - '${_REGION}-docker.pkg.dev/${_PROJECT_ID}/${_SERVICE_NAME}:${_TAG_NAME}'
+      - '${_REGION}-docker.pkg.dev/${_PROJECT_ID}/${_SERVICE_NAME}/${_SERVICE_NAME}:${_TAG_NAME}'
       - '--region'
       - '${_REGION}'
       - '--platform'
@@ -24,7 +24,7 @@ steps:
       - 'APP_VERSION=${_TAG_NAME}' # Pass version as environment variable to the app
 
 images:
-  - '${_REGION}-docker.pkg.dev/${_PROJECT_ID}/${_SERVICE_NAME}:${_TAG_NAME}'
+  - '${_REGION}-docker.pkg.dev/${_PROJECT_ID}/${_SERVICE_NAME}/${_SERVICE_NAME}:${_TAG_NAME}'
 
 options:
   logging: CLOUD_LOGGING_ONLY
