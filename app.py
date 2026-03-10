@@ -10,16 +10,13 @@ APP_VERSION = "2.1.1"
 
 # Initialize Firestore
 try:
-    # Use a service account
-    # The path to your service account key file
-    # For local development, place serviceAccountKey.json in the same directory as app.py
-    # For deployment, consider environment variables or other secure methods
-    cred = credentials.Certificate("serviceAccountKey.json")
+    # Use Application Default Credentials (ADC) for Cloud Run
+    # This automatically picks up the service account attached to the Cloud Run service
+    cred = credentials.ApplicationDefault()
     firebase_admin.initialize_app(cred)
     db = firestore.client()
 except Exception as e:
     print(f"Error initializing Firebase: {e}")
-    print("Please ensure 'serviceAccountKey.json' is present and valid, or Firebase is initialized correctly.")
     db = None # Set db to None if initialization fails
 
 @app.route('/')
