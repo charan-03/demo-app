@@ -4,6 +4,13 @@ FROM python:3.9-slim-buster
 # Set the working directory in the container
 WORKDIR /app
 
+# Install build dependencies and upgrade pip/setuptools for more robust installs
+RUN apt-get update && \
+    apt-get install -y --no-install-recommends build-essential gcc && \
+    pip install --no-cache-dir --upgrade pip setuptools && \
+    apt-get clean && \
+    rm -rf /var/lib/apt/lists/*
+
 # Install any needed packages specified in requirements.txt
 COPY requirements.txt .
 RUN pip install --no-cache-dir -r requirements.txt
